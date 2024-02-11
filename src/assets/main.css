@@ -1,0 +1,15 @@
+/* @import './base.css'; */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+textarea {
+  box-sizing: border-box;
+  overflow-y: hidden;
+  resize: none;
+  min-height: 50px;
+  height: 100%;
+  width: 100%;
+  flex: 1;
+}
