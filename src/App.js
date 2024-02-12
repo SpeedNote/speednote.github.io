@@ -35,12 +35,6 @@ export default {
     deleteMessage:function(id) {
       deleteDoc(doc(db, 'messages', id))
     },
-    setMessageFocus(message, isFocused) {
-      message.isFocused = isFocused;
-    },
-    isMessageFocused(message) {
-      return message.isFocused;
-    },
   },
   mounted() {
     const latestQuery = query(collection(db, "messages"),orderBy('date'));
