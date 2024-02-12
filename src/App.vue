@@ -10,21 +10,23 @@
     <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" /></svg></button>
   </div>
 
+<!-- :class="{ 'm-0': isEditing }" -->
 
   <hr class="my-4">
-  <div :key="message" v-for="message in messages" class="flex py-4">
+  <div :key="message" v-for="message in messages" class="flex my-4">
     
+      <p 
+        v-if="!isEditing" 
+        @click="startEditing" 
+        class="select-none flex-1 whitespace-pre-wrap resize-none h-auto"
+        >{{ message.text }}</p>
 
-    <!-- EDITABLE TEXT -->
-    <textarea 
-      v-model="message.text" 
-      @blur="updateMessage(message)" 
-      ref="autoResizeTextarea"
-      @input="adjustTextareaHeight"
-      class="auto-resize"
-      :style="{ height: autoResizeHeight }"
-    ></textarea>
-
+      <textarea 
+        v-if="isEditing"
+        v-model="message.text" 
+        @blur="updateMessage(message)"
+        class="flex-1 resize-none overflow-y-hidden">
+      </textarea>
 
 
   <!-- DELETE BUTTON -->
@@ -46,13 +48,15 @@
 
 </template>
 
-
-
 <script>
+
 import App from './App';
 
 export default {
   mixins: [App],
 };
+
+
+
 </script>
 

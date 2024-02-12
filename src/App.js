@@ -10,7 +10,8 @@ const db = getFirestore(app);
 export default {
   data:()=> {
     return {
-      messages:ref([])
+      messages:ref([]),
+      isEditing: false,
     }
   },
   methods: {
@@ -21,25 +22,24 @@ export default {
       });  
       this.$refs.newmessage.value = ""
     },
+    startEditing() {
+      this.isEditing = true;
+    },
     updateMessage:function(message) {
-      setDoc(doc(db,'messages', message.id),{
+      this.isEditing = false;
+      setDoc(doc(db, 'messages', message.id),{
         text:message.text,
         date:message.date
       })
     },
     deleteMessage:function(id) {
-      deleteDoc(doc(db,'messages',id))
+      deleteDoc(doc(db, 'messages', id))
     },
     setMessageFocus(message, isFocused) {
       message.isFocused = isFocused;
     },
     isMessageFocused(message) {
       return message.isFocused;
-    },
-    adjustTextareaHeight(e) {
-      const textarea = e.target;
-      textarea.style.height = 'auto';
-      textarea.style.height = `${textarea.scrollHeight}px`;
     },
   },
   mounted() {
