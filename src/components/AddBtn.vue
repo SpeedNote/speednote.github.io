@@ -1,5 +1,5 @@
 <template>
-  <button @click="addNewMessage" class="h-fit bg-green-400 text-white p-1 rounded hover:bg-green-700 ml-2">
+  <button @click="addNewMessage" class="h-fit bg-green-400 text-white p-1 rounded hover:bg-green-500 mx-2">
   
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
   

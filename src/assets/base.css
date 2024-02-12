@@ -1,0 +1,18 @@
+body{
+  /* background: #9198e522 linear-gradient(#9198e522, #e6646523) no-repeat; */
+  height: 100vh;
+}
+
+.fade-in{
+  opacity: 0;
+  animation: fade 1s ease-in forwards;
+}
+
+@keyframes fade {
+	0% {
+		opacity: 0%;
+	}
+	100% {
+		opacity: 100%;
+	}
+}
