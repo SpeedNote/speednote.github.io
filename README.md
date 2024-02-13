@@ -1,5 +1,5 @@
-## SpeedNote
-### An awesome Web Application built using Vue.js and Firebase
+## SpeedNote >> Frictionless note taking.
+### An awesome Web Application built using Vue.js and Firebase.
 
 [LIVE SITE]()
 
