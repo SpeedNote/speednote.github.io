@@ -23,7 +23,7 @@
 
 
     <!-- MESSAGES -->
-    <div :key="message.id" v-for="message in messages" class="flex items-end mx-2 sm:mx-0 my-4 bg-[#9198e511]">
+    <div :key="message.id" v-for="message in messages" class="flex items-end mx-2 sm:mx-0 my-4 rounded-bl bg-[#9198e511]">
       
       <!-- DISPLAY TEXT -->
       <p
@@ -40,7 +40,7 @@
         v-if="message.isEditing"
         v-model="message.text"
         @blur="updateMessage(message)"
-        class="px-2 py-1 flex-1 resize-none overflow-y-hidden"
+        class="px-2 py-1 flex-1 resize-none overflow-y-hidden outline-none"
         rows="20"
       ></textarea>
       

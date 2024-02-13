@@ -1,7 +1,7 @@
 <template>
   <button 
     @click="onDelete" 
-    class="h-fit bg-red-100 text-white p-1 rounded hover:bg-red-700 ml-2"
+    class="h-fit bg-red-100 text-white p-1 rounded-br hover:bg-red-700 ml-0"
   >
 
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">

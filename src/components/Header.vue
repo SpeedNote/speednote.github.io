@@ -1,5 +1,5 @@
 <template>
-<div class="flex items-center justify-between mt-0 mb-0 pt-0.5 pb-1 px-1 sm:px-4 text-white bg-[#9198e5]">
+<div class="flex items-center justify-between mt-0 mb-0 pt-0.5 pb-1 pl-1 text-white bg-[#9198e5]">
 
   <div class="flex justify-between">  
       <p @click="toggleText" class="mr-2 cursor-pointer">
@@ -11,11 +11,11 @@
       <p :class="{ 'hidden': !isTextVisible }" class="fast-fade-in select-none">info</p>
   </div>
 
-  <p :class="{ 'hidden': !isTextVisible }" class="fast-fade-in select-none"><span class="italic font-bold">SpeedNote</span> &gt;&gt; <span class="bg-[#7777e555] p-1">Frictionless note taking</span></p>
+  <p :class="{ 'hidden': !isTextVisible }" class="fast-fade-in select-none"><span class="italic font-bold">SpeedNote</span> &gt;&gt; <span class="bg-[#7777e555] px-2 py-1">Frictionless note taking</span></p>
 
   <div class="flex flex-1 justify-between text-center select-none fast-fade-in" :class="{ 'hidden': isTextVisible }">
     <p class="font-bold uppercase text-sm">Double-click a text box to Edit</p>
-    <p class="font-bold uppercase text-sm">Click outside box to AutoSave</p>
+    <p class="font-bold uppercase text-sm sm:px-2">Click outside box to AutoSave</p>
   </div>
 
 </div>
