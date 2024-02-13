@@ -1,11 +1,22 @@
 import {firebaseConfig} from "./firebase";
-import {ref,onUnmounted} from 'vue';
 import {onSnapshot, collection, doc, deleteDoc, setDoc, addDoc, orderBy, query} from 'firebase/firestore';
-import { getFirestore } from 'firebase/firestore';
+
 import { initializeApp } from "firebase/app";
+import { getFirestore } from 'firebase/firestore';
+import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
+
+import {ref, onUnmounted} from 'vue';
+
+const siteKey = "6LdN_HEpAAAAAErIeJrFdpLt-0lhf4IFqwUEkznh"
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
+// Google ReCaptchaV3 
+initializeAppCheck(app, {
+  provider: new ReCaptchaV3Provider(siteKey),
+  isTokenAutoRefreshEnabled: true,
+});
 
 export default {
   data:()=> {
