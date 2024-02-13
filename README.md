@@ -1,11 +1,11 @@
-## Project Name
+## SpeedNote
 
 [LIVE SITE]()
 
 ![ALT:preview](preview.png)
 
 
-
+# This project uses a Firebase Account `https://console.firebase.google.com/` with Cloud Firestore Databae provisioning/configuration. Feel free to refactor the code for your preferred database system.
 
 ## Install tailwindcss
 ```

@@ -12,6 +12,7 @@
         placeholder="Write something cool..." 
         class="mr-4 ml-4 p-2 flex-1 resize-none focus:h-[500px]"></textarea>
 
+        <!-- remove mr-4 above if AddBtn used -->
         <!-- <AddBtn @click="addNewMessage" /> -->
     </div>
     
