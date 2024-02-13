@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="fade-in max-w-[800px] mx-auto m-8 mt-0">
+  <div id="app" class="fast-fade-in max-w-[800px] mx-auto m-8 mt-0">
     <Header />
     
     <!-- SUBMIT BOX -->

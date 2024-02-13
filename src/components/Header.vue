@@ -1,5 +1,9 @@
 <template>
-<div class="flex items-center justify-between mt-0 mb-0 pt-0.5 pb-1 pl-1 text-white bg-[#9198e5]">
+<div class="fade-in" :class="{ 'hidden': isTextVisible }">
+  <Socials />
+</div>
+  
+  <div class="flex items-center justify-between mt-0 mb-0 pt-0.5 pb-1 pl-1 text-white bg-[#9198e5]">
 
   <div class="flex justify-between">  
       <p @click="toggleText" class="mr-2 cursor-pointer">
@@ -22,7 +26,12 @@
 </template>
 
 <script>
+import Socials from './Socials.vue'
+
 export default {
+  components: {
+    Socials
+  },
   data() {
     return {
       isTextVisible: true,
