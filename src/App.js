@@ -16,7 +16,7 @@ export default {
   },
   methods: {
     addNewMessage: function () {
-      const hasContent = this.$refs.newmessage.value !== '';
+      const hasContent = this.$refs.newmessage.value.trim() !== '';
       hasContent && addDoc(collection(db, 'messages'), {
         text: this.$refs.newmessage.value,
         date: Date.now(),
@@ -32,10 +32,14 @@ export default {
 
     updateMessage: function (message) {
       message.isEditing = false;
-      setDoc(doc(db, 'messages', message.id), {
-        text: message.text,
-        date: message.date,
-      });
+      if(message.text.trim() === '') {
+        deleteDoc(doc(db, 'messages', message.id));
+      } else {
+        setDoc(doc(db, 'messages', message.id), {
+          text: message.text,
+          date: message.date,
+        });
+      }
     },
 
     deleteMessage: function (id) {
