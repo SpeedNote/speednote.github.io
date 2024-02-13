@@ -11,7 +11,7 @@
       <p :class="{ 'hidden': !isTextVisible }" class="fast-fade-in select-none">info</p>
   </div>
 
-  <p :class="{ 'hidden': !isTextVisible }" class="fast-fade-in select-none"><span class="italic font-bold">SpeedNote</span> &gt;&gt; Frictionless note taking</p>
+  <p :class="{ 'hidden': !isTextVisible }" class="fast-fade-in select-none"><span class="italic font-bold">SpeedNote</span> &gt;&gt; <span class="bg-[#7777e555] p-1">Frictionless note taking</span></p>
 
   <div class="flex flex-1 justify-between text-center select-none fast-fade-in" :class="{ 'hidden': isTextVisible }">
     <p class="font-bold uppercase text-sm">Double-click a text box to Edit</p>
