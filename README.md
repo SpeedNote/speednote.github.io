@@ -1,17 +1,25 @@
 ## SpeedNote
+### An awesome Web Application built using Vue.js and Firebase
 
 [LIVE SITE]()
 
 ![ALT:preview](preview.png)
 
 
-# This project uses a Firebase Account `https://console.firebase.google.com/` with Cloud Firestore Databae provisioning/configuration. Feel free to refactor the code for your preferred database system.
+### This project uses a Firebase Account `https://console.firebase.google.com/` with Cloud Firestore Database provisioning/configuration. 
+
+Feel free to refactor the code for your preferred database system.
+
+
+```sh
+npx create-vue@latest myNewProject
+```
 
 ## Install tailwindcss
 ```
 npm install -D tailwindcss@latest postcss@latest autoprefixer@latest
 ```
-## // create tailwind.config.js
+## Create tailwind.config.js
 ```
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -25,7 +33,7 @@ export default {
   plugins: [],
 }
 ```
-## // create postcss.config.js
+## Create postcss.config.js
 ```
 export default {
   plugins: {
@@ -34,19 +42,17 @@ export default {
   },
 }
 ```
-## add to main.css
+## Add to main.css
 ```
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 ```
 
+# DEPLOYMENT
 
-```sh
-npx create-vue@latest .
-```
 ```sh
 npm run build
 ```
 
-## deploy dist folder to static server
+### Deploy `dist` folder to static server
