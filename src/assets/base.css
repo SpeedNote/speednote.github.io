@@ -3,6 +3,11 @@ body{
   height: 100vh;
 }
 
+.fast-fade-in{
+  opacity: 0;
+  animation: fade .2s ease-in forwards;
+}
+
 .fade-in{
   opacity: 0;
   animation: fade 1s ease-in forwards;

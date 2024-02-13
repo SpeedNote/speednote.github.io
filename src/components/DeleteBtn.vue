@@ -1,6 +1,5 @@
 <template>
   <button 
-
     @click="onDelete" 
     class="h-fit bg-red-100 text-white p-1 rounded hover:bg-red-700 ml-2"
   >
