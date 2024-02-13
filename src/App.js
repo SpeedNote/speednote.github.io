@@ -1,4 +1,4 @@
-import {firebaseConfig} from "./firebase";
+import {firebaseConfig, siteKey} from "./firebase";
 import {onSnapshot, collection, doc, deleteDoc, setDoc, addDoc, orderBy, query} from 'firebase/firestore';
 
 import { initializeApp } from "firebase/app";
@@ -6,8 +6,6 @@ import { getFirestore } from 'firebase/firestore';
 import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
 
 import {ref, onUnmounted} from 'vue';
-
-const siteKey = "6LdN_HEpAAAAAErIeJrFdpLt-0lhf4IFqwUEkznh"
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
