@@ -18,7 +18,7 @@
 export default {
   methods: {
     onDelete() {
-      this.$emit('delete'); // Emit a delete event to be handled in the parent component
+      this.$emit('delete');
     }
   }
 };
