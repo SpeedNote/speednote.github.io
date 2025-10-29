@@ -11,6 +11,7 @@ const saveReminder = document.getElementById("saveReminder");
 const searchInput = document.getElementById("searchNotes");
 const clearHighlightsBtn = document.getElementById("clearHighlightsBtn");
 const categoryInput = document.getElementById("categoryInput");
+let activeCategoryFilter = "";
 const showAllBtn = document.getElementById("showAllBtn");
 
 // =====================
@@ -79,57 +80,81 @@ function showSaveReminder() {
 }
 
 // Render notes (with optional search and category filter)
-function renderNotes(searchQuery = "", categoryFilter = "") {
-  notesContainer.innerHTML = "";
+function renderNotes(searchQuery = "", filterCategory = "", strictCategory = false) {
+  // If a filterCategory is passed, store it in global state
+  if (filterCategory) activeCategoryFilter = filterCategory;
 
-  if (categoryFilter) {
-    showAllBtn.classList.remove("hidden");
-  } else {
-    showAllBtn.classList.add("hidden");
-  }
+  notesContainer.innerHTML = "";
 
   [...notes].reverse()
     .filter(note => {
       const matchesSearch = note.content.toLowerCase().includes(searchQuery);
-      const matchesCategory = categoryFilter ? note.category === categoryFilter : true;
-      return matchesSearch && matchesCategory;
+
+      if (activeCategoryFilter) {
+        if (!note.category) return false;
+
+        const categories = note.category
+          .split(",")
+          .map(c => c.trim().toLowerCase())
+          .filter(Boolean);
+
+        if (strictCategory) {
+          // Strict match: note must include the clicked category
+          return matchesSearch && categories.includes(activeCategoryFilter.toLowerCase());
+        } else {
+          // Loose match (default)
+          return matchesSearch && categories.some(c => c.includes(activeCategoryFilter.toLowerCase()));
+        }
+      }
+
+      return matchesSearch;
     })
     .forEach(note => {
       const noteDiv = document.createElement("div");
       noteDiv.className = `text-xl border-4 border-transparent py-2 pl-2 pr-1 flex justify-between items-start gap-2 bg-gray-50`;
       noteDiv.style.borderColor = note.highlight || "transparent";
 
+      // Text container
       const text = document.createElement("div");
       text.className = "flex-1 whitespace-pre-wrap";
 
-      // Category label first (above text)
+      // Categories above the note text
       if (note.category) {
         const catContainer = document.createElement("div");
-        catContainer.className = "-mt-2 p-0"
-        const cat = document.createElement("div");
-        cat.textContent = note.category;
-        cat.className = "inline-block text-xs mb-2 px-2 py-0.5 rounded-full bg-gray-200 text-gray-700 cursor-pointer hover:bg-gray-300";
-        cat.addEventListener("click", () => {
-          renderNotes("", note.category);
-        });
-        catContainer.appendChild(cat);
+        catContainer.className = "-mt-2 p-0 flex flex-wrap gap-1";
+
+        note.category
+          .split(",")
+          .map(c => c.trim())
+          .filter(Boolean)
+          .forEach(catName => {
+            const cat = document.createElement("div");
+            cat.textContent = catName;
+            cat.className =
+              "inline-block text-xs my-2 px-2 py-0.5 rounded-full bg-gray-200 text-gray-700 cursor-pointer hover:bg-gray-300";
+            cat.addEventListener("click", () => {
+              renderNotes(searchInput.value.trim().toLowerCase(), catName, true); // strict filter
+            });
+            catContainer.appendChild(cat);
+          });
+
         text.appendChild(catContainer);
-        // text.appendChild(document.createElement("br"));
       }
 
-      // Then the note text
+      // Note content
       const contentSpan = document.createElement("span");
       contentSpan.innerText = note.content;
       text.appendChild(contentSpan);
 
-
+      // Button group
       const btnGroup = document.createElement("div");
       btnGroup.className = "flex flex-col gap-1 items-end";
 
+      // Highlight buttons
       const colors = [
         { value: "yellow" },
         { value: "cyan" },
-        { value: "#4ade80" },
+        { value: "#4ade80" }, // green
         { value: "red" },
       ];
 
@@ -139,12 +164,13 @@ function renderNotes(searchQuery = "", categoryFilter = "") {
         btn.style.backgroundColor = c.value;
         btn.addEventListener("click", () => {
           note.highlight = note.highlight === c.value ? null : c.value;
-          renderNotes(searchInput.value.trim().toLowerCase(), categoryFilter);
+          renderNotes(searchInput.value.trim().toLowerCase(), activeCategoryFilter, true);
           saveToLocal();
         });
         btnGroup.appendChild(btn);
       });
 
+      // Edit & Delete buttons
       const editBtn = document.createElement("button");
       editBtn.textContent = "Edit";
       editBtn.className = "w-20 bg-white border text-black text-sm px-2 py-0.5 rounded-md";
@@ -156,7 +182,7 @@ function renderNotes(searchQuery = "", categoryFilter = "") {
       delBtn.addEventListener("click", () => {
         if (confirm("Delete this note?")) {
           notes = notes.filter(n => n.id !== note.id);
-          renderNotes(searchInput.value.trim().toLowerCase(), categoryFilter);
+          renderNotes(searchInput.value.trim().toLowerCase(), activeCategoryFilter, true);
           saveToLocal();
         }
       });
@@ -168,7 +194,29 @@ function renderNotes(searchQuery = "", categoryFilter = "") {
       noteDiv.appendChild(btnGroup);
       notesContainer.appendChild(noteDiv);
     });
+
+  renderResetCategoryButton();
 }
+
+// Render the reset category button
+function renderResetCategoryButton() {
+  let resetBtn = document.getElementById("resetCategoryBtn");
+  if (!resetBtn) {
+    resetBtn = document.createElement("button");
+    resetBtn.id = "resetCategoryBtn";
+    resetBtn.className = "px-2 py-0.5 border border-gray-400 rounded-sm text-sm hover:bg-gray-200 mb-2 w-36";
+    resetBtn.textContent = "Reset Categories";
+    document.getElementById("notesContainer").before(resetBtn);
+  }
+
+  resetBtn.style.display = activeCategoryFilter ? "inline-block" : "none";
+  resetBtn.onclick = () => {
+    activeCategoryFilter = "";
+    renderNotes(searchInput.value.trim().toLowerCase());
+    resetBtn.style.display = "none";
+  };
+}
+
 
 // Edit note
 function editNote(id) {
