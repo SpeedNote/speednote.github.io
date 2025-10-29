@@ -235,7 +235,7 @@ function saveAllNotes() {
   const blob = new Blob([JSON.stringify(notes, null, 2)], { type: "application/json" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = "notes.json";
+  a.download = "speednote.json";
   a.click();
 }
 
