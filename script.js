@@ -10,13 +10,15 @@ const deleteAllBtn = document.getElementById("deleteAllBtn");
 const saveReminder = document.getElementById("saveReminder");
 const searchInput = document.getElementById("searchNotes");
 const clearHighlightsBtn = document.getElementById("clearHighlightsBtn");
-
+const categoryInput = document.getElementById("categoryInput");
+const showAllBtn = document.getElementById("showAllBtn");
 
 // =====================
 // STATE
 // =====================
 let notes = [];
 let editingId = null;
+let currentCategory = "";
 
 // =====================
 // LOCALSTORAGE HELPERS
@@ -48,86 +50,101 @@ function saveNote() {
 
   if (editingId) {
     const note = notes.find(n => n.id == editingId);
-    if (note) note.content = content;
+    if (note) {
+      note.content = content;
+      note.category = categoryInput.value.trim();
+    }
     editingId = null;
   } else {
-    notes.push({ id: Date.now(), content, highlight: null });
+    notes.push({
+      id: Date.now(),
+      content,
+      highlight: null,
+      category: categoryInput.value.trim() || ""
+    });
   }
 
   editor.innerText = "";
+  categoryInput.value = "";
+  currentCategory = "";
   renderNotes();
   showSaveReminder();
-  saveToLocal(); // save automatically
+  saveToLocal();
 }
 
-// Show inline save reminder for 3 seconds
+// Save reminder
 function showSaveReminder() {
   saveReminder.classList.remove("hidden");
   setTimeout(() => saveReminder.classList.add("hidden"), 3000);
 }
 
-// Render all notes (latest at top)
-function renderNotes(searchQuery = "") {
+// Render notes (with optional search and category filter)
+function renderNotes(searchQuery = "", categoryFilter = "") {
   notesContainer.innerHTML = "";
 
-  // Show newest first
+  if (categoryFilter) {
+    showAllBtn.classList.remove("hidden");
+  } else {
+    showAllBtn.classList.add("hidden");
+  }
+
   [...notes].reverse()
-    .filter(note => note.content.toLowerCase().includes(searchQuery)) // filter by search
+    .filter(note => {
+      const matchesSearch = note.content.toLowerCase().includes(searchQuery);
+      const matchesCategory = categoryFilter ? note.category === categoryFilter : true;
+      return matchesSearch && matchesCategory;
+    })
     .forEach(note => {
       const noteDiv = document.createElement("div");
-      // Base styles
-      noteDiv.className = `text-xl border-4 border-transparent p-3 flex justify-between items-start gap-2 bg-gray-50`;
+      noteDiv.className = `text-xl border-4 border-transparent py-2 pl-2 pr-1 flex justify-between items-start gap-2 bg-gray-50`;
       noteDiv.style.borderColor = note.highlight || "transparent";
-
-
-      // Highlight border
-      switch (note.highlight) {
-        case "yellow":
-          noteDiv.classList.add("border-4");
-          break;
-        case "cyan":
-          noteDiv.classList.add("border-4");
-          break;
-        case "green":
-          noteDiv.classList.add("border-4");
-          break;
-        case "red":
-          noteDiv.classList.add("border-4");
-          break;
-        default:
-          noteDiv.classList.add("border-transparent");
-          break;
-      }
 
       const text = document.createElement("div");
       text.className = "flex-1 whitespace-pre-wrap";
-      text.innerText = note.content;
+
+      // Category label first (above text)
+      if (note.category) {
+        const catContainer = document.createElement("div");
+        catContainer.className = "-mt-2 p-0"
+        const cat = document.createElement("div");
+        cat.textContent = note.category;
+        cat.className = "inline-block text-xs mb-2 px-2 py-0.5 rounded-full bg-gray-200 text-gray-700 cursor-pointer hover:bg-gray-300";
+        cat.addEventListener("click", () => {
+          renderNotes("", note.category);
+        });
+        catContainer.appendChild(cat);
+        text.appendChild(catContainer);
+        // text.appendChild(document.createElement("br"));
+      }
+
+      // Then the note text
+      const contentSpan = document.createElement("span");
+      contentSpan.innerText = note.content;
+      text.appendChild(contentSpan);
+
 
       const btnGroup = document.createElement("div");
       btnGroup.className = "flex flex-col gap-1 items-end";
 
-      // Highlight buttons
       const colors = [
-        { name: "Yellow", value: "yellow" },
-        { name: "Cyan", value: "cyan" },
-        { name: "Green", value: "#4ade80" },
-        { name: "Red", value: "red" },
+        { value: "yellow" },
+        { value: "cyan" },
+        { value: "#4ade80" },
+        { value: "red" },
       ];
 
       colors.forEach(c => {
         const btn = document.createElement("button");
-        // btn.textContent = c.name;
         btn.className = "h-4 w-20 text-sm px-2 py-0.5 hover:border-gray-400 rounded-md";
         btn.style.backgroundColor = c.value;
         btn.addEventListener("click", () => {
           note.highlight = note.highlight === c.value ? null : c.value;
-          renderNotes(searchInput.value.trim().toLowerCase());
+          renderNotes(searchInput.value.trim().toLowerCase(), categoryFilter);
           saveToLocal();
         });
         btnGroup.appendChild(btn);
       });
 
-      // Edit & Delete
       const editBtn = document.createElement("button");
       editBtn.textContent = "Edit";
       editBtn.className = "w-20 bg-white border text-black text-sm px-2 py-0.5 rounded-md";
@@ -137,9 +154,9 @@ function renderNotes(searchQuery = "") {
       delBtn.textContent = "Delete";
       delBtn.className = "w-20 bg-white border text-black text-sm px-2 py-0.5 rounded-md";
       delBtn.addEventListener("click", () => {
-        if (confirm("Are you sure you want to delete this note? This will also remove it from localStorage.")) {
+        if (confirm("Delete this note?")) {
           notes = notes.filter(n => n.id !== note.id);
-          renderNotes(searchInput.value.trim().toLowerCase());
+          renderNotes(searchInput.value.trim().toLowerCase(), categoryFilter);
           saveToLocal();
         }
       });
@@ -149,23 +166,22 @@ function renderNotes(searchQuery = "") {
 
       noteDiv.appendChild(text);
       noteDiv.appendChild(btnGroup);
-
       notesContainer.appendChild(noteDiv);
     });
 }
 
-
-
-// Edit note (keep original visible)
+// Edit note
 function editNote(id) {
   const note = notes.find(n => n.id === id);
   if (!note) return;
   editor.innerText = note.content;
+  categoryInput.value = note.category || "";
+  currentCategory = note.category || "";
   editingId = id;
   editor.focus();
 }
 
-// Save all notes as JSON
+// Export notes
 function saveAllNotes() {
   if (notes.length === 0) return alert("No notes to save.");
   const blob = new Blob([JSON.stringify(notes, null, 2)], { type: "application/json" });
@@ -175,7 +191,7 @@ function saveAllNotes() {
   a.click();
 }
 
-// Import notes from JSON
+// Import notes
 function importNotes() {
   const input = document.createElement("input");
   input.type = "file";
@@ -202,7 +218,7 @@ function importNotes() {
   input.click();
 }
 
-// Delete all notes
+// Delete all
 function deleteAllNotes() {
   if (confirm("Delete all notes?")) {
     notes = [];
@@ -211,29 +227,29 @@ function deleteAllNotes() {
   }
 }
 
-// =====================
-// SEARCH
-// =====================
-// Filter and render notes based on search query
+// Clear all highlights
+clearHighlightsBtn.addEventListener("click", () => {
+  if (notes.length === 0) return;
+  if (confirm("Remove all highlights from all notes?")) {
+    notes.forEach(note => note.highlight = null);
+    renderNotes(searchInput.value.trim().toLowerCase());
+    saveToLocal();
+  }
+});
+
+// Search
 searchInput.addEventListener("input", () => {
   const query = searchInput.value.trim().toLowerCase();
   renderNotes(query);
 });
 
+// Show all
+showAllBtn.addEventListener("click", () => renderNotes());
 
-// =====================
-// CLEAR ALL HIGHTLIGHTS
-// =====================
-clearHighlightsBtn.addEventListener("click", () => {
-  if (notes.length === 0) return;
-
-  if (confirm("Remove all highlights from all notes?")) {
-    notes.forEach(note => note.highlight = null); // remove all highlights
-    renderNotes(searchInput.value.trim().toLowerCase());
-    saveToLocal(); // update localStorage
-  }
+// Category tracking
+categoryInput.addEventListener("input", () => {
+  currentCategory = categoryInput.value.trim();
 });
-
 
 // =====================
 // EVENT LISTENERS
