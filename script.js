@@ -20,7 +20,7 @@ let activeCategoryFilter = "";
 // =====================
 // LOCAL STORAGE
 // =====================
-const STORAGE_KEY = "notesAppData";
+const STORAGE_KEY = "Speednote";
 
 function saveToLocal() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
