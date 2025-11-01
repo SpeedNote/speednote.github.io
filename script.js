@@ -82,6 +82,7 @@ function saveNote() {
   renderNotes();
   showSaveReminder();
   saveToLocal();
+  editor.focus();
 }
 
 
