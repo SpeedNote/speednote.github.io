@@ -44,13 +44,19 @@ function saveNote() {
   let content = editor.innerHTML
     .replace(/<div><br><\/div>/g, '\n')  // empty divs → single newline
     .replace(/<div>/g, '\n')             // divs → newline
-    .replace(/<\/div>/g, '')              // remove closing div
+    .replace(/<\/div>/g, '')             // remove closing div
     .replace(/<br\s*\/?>/g, '\n')        // <br> → newline
     .replace(/\r\n?/g, '\n');            // normalize Windows newlines
 
   // Remove leading & trailing newlines
   content = content.replace(/^\n+/, '').replace(/\n+$/g, '');
 
+  // ✅ Decode HTML entities like &lt; &gt; &amp; etc.
+  const decoder = document.createElement('textarea');
+  decoder.innerHTML = content;
+  content = decoder.value;
+
+  // Process categories
   const categories = categoryInput.value
     .split(",")
     .map(c => c.trim())
@@ -76,12 +82,15 @@ function saveNote() {
     });
   }
 
-  editor.innerHTML = ""; // clear editor
+  // Clear editor and reset UI
+  editor.innerHTML = "";
   categoryInput.value = "";
   activeCategoryFilter = "";
   renderNotes();
   showSaveReminder();
   saveToLocal();
+
+  // ✅ Refocus editor for fast typing
   editor.focus();
 }
 
