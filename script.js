@@ -289,11 +289,20 @@ function renderResetCategoryButton() {
 function editNote(id) {
   const note = notes.find(n => n.id === id);
   if (!note) return;
-  editor.innerText = note.content;
+
+  // Convert plain text newlines to HTML-friendly breaks
+  const htmlContent = note.content
+    .split('\n')
+    .map(line => line.trim() ? `<div>${line}</div>` : '<div><br></div>')
+    .join('');
+
+  editor.innerHTML = htmlContent;
+
   categoryInput.value = note.category || "";
   editingId = id;
   editor.focus();
 }
+
 
 // =====================
 // EXPORT / IMPORT
