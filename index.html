@@ -34,8 +34,13 @@
       <span class="bg-white text-black italic text-sm ml-1">Life, organised</span>
       </h1>
       <p id="saveReminder" class="flex justify-end text-sm text-green-600 hidden mr-1 xl:mr-0 ">✅ Saved <span class="hidden md:inline-block"> &nbsp;to browser storage</span></p>
+
+       <div id="collapseBtn" class="md:hidden gap-2 items-center">
+        <img title="Click to expand panel" src="collapse-icon.png" alt="expand icon" class="h-6 w-6 rotate-180">
+      </div>
     </div>
 
+<div id="collapseContainer">
     <div id="editor"
          autofocus
          contenteditable="true"
@@ -57,7 +62,10 @@
       </div>
     </div>
 
-  </div>
+<!-- \collapseContainer -->
+</div>
+
+</div>
 
   <!-- RIGHT COLUMN: Saved Notes -->
   <div class="flex-1 bg-white mt-2 mr-2 flex flex-col gap-4 h-screen">

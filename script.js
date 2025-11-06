@@ -2,6 +2,8 @@
 // DOM ELEMENTS
 // =====================
 const editor = document.getElementById("editor");
+const collapseBtn = document.getElementById('collapseBtn');
+const collapseContainer = document.getElementById('collapseContainer');
 const notesContainer = document.getElementById("notesContainer");
 const saveNoteBtn = document.getElementById("saveNoteBtn");
 const saveAllBtn = document.getElementById("saveAllBtn");
@@ -35,6 +37,39 @@ function loadFromLocal() {
     } catch {}
   }
 }
+
+let isCollapsed = false;
+
+function updateCollapseButton() {
+  // Toggle state
+  isCollapsed = !isCollapsed;
+
+  // Toggle visibility
+  if (isCollapsed) {
+    collapseContainer.classList.add('hidden');
+    collapseBtn.innerHTML = `
+      <img
+        title="Click to expand panel"
+        src="collapse-icon.png"
+        alt="expand icon"
+        class="h-6 w-6"
+      >
+    `;
+  } else {
+    collapseContainer.classList.remove('hidden');
+    collapseBtn.innerHTML = `
+      <img
+        title="Click to collapse panel"
+        src="collapse-icon.png"
+        alt="collapse icon"
+        class="h-6 w-6 rotate-180"
+      >
+    `;
+  }
+}
+
+collapseBtn.addEventListener('click', updateCollapseButton);
+
 
 // =====================
 // SAVE NOTE
