@@ -86,7 +86,7 @@ function saveNote() {
   // Remove leading & trailing newlines
   content = content.replace(/^\n+/, '').replace(/\n+$/g, '');
 
-  // ✅ Decode HTML entities like &lt; &gt; &amp; etc.
+  //  Decode HTML entities like &lt; &gt; &amp; etc.
   const decoder = document.createElement('textarea');
   decoder.innerHTML = content;
   content = decoder.value;
@@ -125,7 +125,7 @@ function saveNote() {
   showSaveReminder();
   saveToLocal();
 
-  // ✅ Refocus editor for fast typing
+  //  Refocus editor for fast typing
   editor.focus();
 }
 
